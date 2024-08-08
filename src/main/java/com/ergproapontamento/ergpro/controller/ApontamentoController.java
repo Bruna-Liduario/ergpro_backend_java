@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ergproapontamento.ergpro.dto.ApontamentoDTO;
 import com.ergproapontamento.ergpro.dto.dados.DadosApontamentoDto;
+import com.ergproapontamento.ergpro.dto.dados.SalvarApontamentoDto;
 import com.ergproapontamento.ergpro.exception.NotFoundException;
 import com.ergproapontamento.ergpro.exception.ValidacoesException;
 import com.ergproapontamento.ergpro.repository.entity.Apontamento;
@@ -42,16 +43,17 @@ public class ApontamentoController {
 	}
 	
 	@PostMapping("/salvar")
-	public ResponseEntity<ApontamentoDTO> salvarApontamento(@RequestBody ApontamentoDTO apontamentoDto) throws ValidacoesException {
-		ApontamentoDTO apontamentoSalvo = apontamentoService.salvarApontamento(apontamentoDto);
+	public ResponseEntity<ApontamentoDTO> salvarApontamento(@RequestBody SalvarApontamentoDto salvarApontamentoDto) throws ValidacoesException {
+		ApontamentoDTO apontamentoSalvo = apontamentoService.salvarApontamento(salvarApontamentoDto);
 		return new ResponseEntity<>(apontamentoSalvo, HttpStatus.CREATED);
 	}
 	
+	
 	@PutMapping("/atualizar")
-	public ResponseEntity<ApontamentoDTO> atualizarApontamento(@RequestBody ApontamentoDTO apontamentoDto) throws ValidacoesException, NotFoundException {
-		ApontamentoDTO apontamentoAtualizado = apontamentoService.atualizarApontamentos(apontamentoDto);
-		return ResponseEntity.ok(apontamentoAtualizado);
-	}
+	public ResponseEntity<ApontamentoDTO> atualizarApontamento(@RequestBody SalvarApontamentoDto salvarApontamentoDto) throws ValidacoesException, NotFoundException {
+        ApontamentoDTO apontamentoAtualizado = apontamentoService.atualizarApontamentos(salvarApontamentoDto);
+        return ResponseEntity.ok(apontamentoAtualizado);
+    }
 	
 	@DeleteMapping("/deletar/{id}")
 	public ResponseEntity<Apontamento> excluirApontamento(@PathVariable Long id) throws NotFoundException{

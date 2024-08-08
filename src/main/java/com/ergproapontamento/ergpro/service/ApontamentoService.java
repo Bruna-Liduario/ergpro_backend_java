@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ergproapontamento.ergpro.dto.ApontamentoDTO;
 import com.ergproapontamento.ergpro.dto.dados.DadosApontamentoDto;
+import com.ergproapontamento.ergpro.dto.dados.SalvarApontamentoDto;
 import com.ergproapontamento.ergpro.exception.NotFoundException;
 import com.ergproapontamento.ergpro.exception.ValidacoesException;
 import com.ergproapontamento.ergpro.repository.ApontamentoRepository;
@@ -50,8 +51,10 @@ public class ApontamentoService {
 			dadosApontamento.setData(apontamento.getData());
 		    dadosApontamento.setMinutos(apontamento.getMinutos());
 	        dadosApontamento.setMinutosExtra(apontamento.getMinutosExtra());
+	        dadosApontamento.setMinutosSt(formatMinutos(apontamento.getMinutos()));
+	        dadosApontamento.setMinutosextraSt(formatMinutos(apontamento.getMinutosExtra()));
 			dadosApontamento.setObservacao(apontamento.getObservacao());
-			
+						
 			String nomeFuncionario = apontamento.getFuncionarios().getNome() != null ? apontamento.getFuncionarios().getNome() : null;
 			dadosApontamento.setNomeFuncionario(nomeFuncionario);
 			
@@ -69,10 +72,22 @@ public class ApontamentoService {
 	        	       
 	                
 			listaDadosApontamentos.add(dadosApontamento);			
-		}
+		}	
 		
-		return listaDadosApontamentos;
+		return listaDadosApontamentos;		
 	}
+	
+	
+	// Método para formatar minutos para string HH:mm
+	private String formatMinutos(Integer minutos) {
+	    if (minutos == null) {
+	        return null;
+	    }
+	    int hours = minutos / 60;
+	    int minutes = minutos % 60;
+	    return String.format("%02d:%02d", hours, minutes);
+	}
+	
 	
 	
 	//buscar
@@ -84,23 +99,23 @@ public class ApontamentoService {
 	}
 	
 	//salvar
-	public ApontamentoDTO salvarApontamento(ApontamentoDTO apontamentoDto) throws ValidacoesException {		
-		validacaoCampoObrigatorio(apontamentoDto);
-		verificarExistenciaIdRelacionamentos(apontamentoDto);
+	public ApontamentoDTO salvarApontamento(SalvarApontamentoDto salvarApontamentoDto) throws ValidacoesException {		
+		validacaoCampoObrigatorio(salvarApontamentoDto);
+		verificarExistenciaIdRelacionamentos(salvarApontamentoDto);
 		
-		Apontamento apontamento = convertDtoToEntity(apontamentoDto);
+		Apontamento apontamento = convertDtoToEntity(salvarApontamentoDto);
 		apontamento = apontamentoRepository.save(apontamento);
 		
 		return apontamento.convertEntityToDto();
 	}
 	
 	//atualizar
-	public ApontamentoDTO atualizarApontamentos(ApontamentoDTO apontamentoDto) throws NotFoundException, ValidacoesException {
-		validarApontamentoExistente(apontamentoDto.getId());
-		validacaoCampoObrigatorio(apontamentoDto);
-		verificarExistenciaIdRelacionamentos(apontamentoDto);
+	public ApontamentoDTO atualizarApontamentos(SalvarApontamentoDto salvarApontamentoDto) throws NotFoundException, ValidacoesException {
+		validarApontamentoExistente(salvarApontamentoDto.getId());
+		validacaoCampoObrigatorio(salvarApontamentoDto);
+		verificarExistenciaIdRelacionamentos(salvarApontamentoDto);
 		
-		Apontamento apontamento = convertDtoToEntity(apontamentoDto);
+		Apontamento apontamento = convertDtoToEntity(salvarApontamentoDto);
 		apontamento = apontamentoRepository.save(apontamento);
 		
 		return apontamento.convertEntityToDto();
@@ -118,10 +133,10 @@ public class ApontamentoService {
 	
 	
 	
-	public void validacaoCampoObrigatorio(ApontamentoDTO apontamentoDto) throws ValidacoesException {
-    	if(apontamentoDto.getData() == null || apontamentoDto.getMinutos() == null || 
-    			apontamentoDto.getMinutosExtra() == null || apontamentoDto.getIdFuncionarios() == null || 
-    			apontamentoDto.getIdOrdemServico() == null || apontamentoDto.getIdAtividade() == null ) {
+	public void validacaoCampoObrigatorio(SalvarApontamentoDto salvarApontamentoDto) throws ValidacoesException {
+    	if(salvarApontamentoDto.getData() == null || salvarApontamentoDto.getMinutosSt() == null || 
+    			salvarApontamentoDto.getMinutosextraSt() == null || salvarApontamentoDto.getIdFuncionarios() == null || 
+    					salvarApontamentoDto.getIdOrdemServico() == null || salvarApontamentoDto.getIdAtividade() == null ) {
 			throw new ValidacoesException("Campo de preenchimento obrigatório!");
 		}		
     }
@@ -133,50 +148,58 @@ public class ApontamentoService {
 	}
 	
 	
-	public void verificarExistenciaIdRelacionamentos(ApontamentoDTO apontamentoDto) throws ValidacoesException {
-		if(apontamentoDto.getIdFuncionarios() != null && !funcionarioRepository.existsById(apontamentoDto.getIdFuncionarios())) {
+	public void verificarExistenciaIdRelacionamentos(SalvarApontamentoDto salvarApontamentoDto) throws ValidacoesException {
+		if(salvarApontamentoDto.getIdFuncionarios() != null && !funcionarioRepository.existsById(salvarApontamentoDto.getIdFuncionarios())) {
 	        throw new ValidacoesException("Funcionário não encontrado!");
 	    }
-		if(apontamentoDto.getIdAtividade() != null && !atividadeRepository.existsById(apontamentoDto.getIdAtividade())) {
+		if(salvarApontamentoDto.getIdAtividade() != null && !atividadeRepository.existsById(salvarApontamentoDto.getIdAtividade())) {
 	        throw new ValidacoesException("Atividade não encontrada!");
 	    }
-		if(apontamentoDto.getIdOrdemServico() != null && !ordemServicoRepository.existsById(apontamentoDto.getIdOrdemServico())) {
+		if(salvarApontamentoDto.getIdOrdemServico() != null && !ordemServicoRepository.existsById(salvarApontamentoDto.getIdOrdemServico())) {
 	        throw new ValidacoesException("Ordem de Serviço não encontrada!");
 	    }
 	}
 	
 	
-	private Apontamento convertDtoToEntity(ApontamentoDTO apontamentoDto) {
+	private Apontamento convertDtoToEntity(SalvarApontamentoDto salvarApontamentoDto) {
 		Apontamento apontamento = new Apontamento();
-		apontamento.setId(apontamentoDto.getId());
-		apontamento.setLocal(apontamentoDto.getLocal());
-		apontamento.setData(apontamentoDto.getData());
-		apontamento.setMinutos(apontamentoDto.getMinutos());
-		apontamento.setMinutosExtra(apontamentoDto.getMinutosExtra());
-		apontamento.setObservacao(apontamentoDto.getObservacao());
+		apontamento.setId(salvarApontamentoDto.getId());
+		apontamento.setLocal(salvarApontamentoDto.getLocal());
+		apontamento.setData(salvarApontamentoDto.getData());
+		apontamento.setMinutos(convertHHmmToMinutes(salvarApontamentoDto.getMinutosSt()));
+	    apontamento.setMinutosExtra(convertHHmmToMinutes(salvarApontamentoDto.getMinutosextraSt()));
+		apontamento.setObservacao(salvarApontamentoDto.getObservacao());
 		
 		 // Relacionamentos	 
-	    if (apontamentoDto.getIdFuncionarios() != null) {
+	    if (salvarApontamentoDto.getIdFuncionarios() != null) {
 	        Funcionario funcionarios = new Funcionario();
-	        funcionarios.setId(apontamentoDto.getIdFuncionarios());
+	        funcionarios.setId(salvarApontamentoDto.getIdFuncionarios());
 	        apontamento.setFuncionarios(funcionarios);;
 	     }
         
-        if (apontamentoDto.getIdAtividade() != null) {
+        if (salvarApontamentoDto.getIdAtividade() != null) {
             Atividade atividade = new Atividade();
-            atividade.setId(apontamentoDto.getIdAtividade());
+            atividade.setId(salvarApontamentoDto.getIdAtividade());
             apontamento.setAtividade(atividade);;
         }
         
-        if (apontamentoDto.getIdOrdemServico() != null) {
+        if (salvarApontamentoDto.getIdOrdemServico() != null) {
             OrdemServico ordemServico = new OrdemServico();
-            ordemServico.setId(apontamentoDto.getIdOrdemServico());
+            ordemServico.setId(salvarApontamentoDto.getIdOrdemServico());
             apontamento.setOrdemServico(ordemServico);;
         }
         return apontamento;
 	}
 	
+	private Integer convertHHmmToMinutes(String hhmm) {
+        if (hhmm == null || hhmm.isEmpty()) {
+            return null;
+        }
+        String[] parts = hhmm.split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+        return hours * 60 + minutes;
+    }
 	
-	
-	
+		
 }

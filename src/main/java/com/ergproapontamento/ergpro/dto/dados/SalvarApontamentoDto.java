@@ -1,4 +1,4 @@
-package com.ergproapontamento.ergpro.dto;
+package com.ergproapontamento.ergpro.dto.dados;
 
 import java.time.LocalDate;
 
@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApontamentoDTO {
-
+public class SalvarApontamentoDto {	
+	
 	private Long id;
 	private String local;
 	private LocalDate data;
@@ -23,4 +23,8 @@ public class ApontamentoDTO {
 	private Long idFuncionarios;
 	private Long idAtividade;
 	private Long idOrdemServico;
+	
+	private String minutosSt;
+	private String minutosextraSt;
+
 }

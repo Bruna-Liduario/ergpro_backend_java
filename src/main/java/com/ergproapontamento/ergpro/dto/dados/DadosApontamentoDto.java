@@ -16,8 +16,8 @@ public class DadosApontamentoDto {
 	private Long id;
 	private String local;
 	private LocalDate data;
-    private String minutos;
-    private String minutosExtra;
+    private Integer minutos;
+    private Integer minutosExtra;   
 	private String observacao;
 	
 	private String nomeFuncionario;
@@ -26,5 +26,7 @@ public class DadosApontamentoDto {
 	private String centroCusto;
 	private String descricaoTipoServico;
 	
+	private String minutosSt;
+	private String minutosextraSt;	
 	
 }
