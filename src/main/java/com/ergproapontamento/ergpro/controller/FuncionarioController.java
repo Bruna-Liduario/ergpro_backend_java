@@ -82,7 +82,7 @@ public class FuncionarioController {
 	}
 	
 	@DeleteMapping("/deletar/{id}")
-	public ResponseEntity<Funcionario> excluirFuncionario(@PathVariable Long id) throws NotFoundException{
+	public ResponseEntity<Funcionario> excluirFuncionario(@PathVariable Long id) throws NotFoundException, ValidacoesException{
 		funcionarioService.excluirFuncionario(id);
 		return ResponseEntity.noContent().build();	
 	}	

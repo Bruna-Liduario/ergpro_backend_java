@@ -1,19 +1,19 @@
-insert into cargos (descricao) values ('Engenheiro Tec. Responsável')
+ insert into cargos (descricao) values ('Engenheiro Tec. Responsável')
 insert into cargos (descricao) values ('Engenheiro Agrimensor')
 insert into cargos (descricao) values ('Engenheiro Civil')
 insert into cargos (descricao) values ('Engenheiro Ambiental')
 
 
-insert into empresas (cnpj, nome, tel1, email, rua, numero, complemento, bairro, cep, cidade, uf, status_empresa) values ( '00.209.792/0001-09', 'ERG Engenharia', '(31) 2138-4700', 'erg@ergbh.com.br', 'R. Rio Grande do Sul', '1066', '1º andar', 'Santo Agostinho', '30170-111', 'Belo Horizonte', 'MG', 'ATIVA');
-insert into empresas (cnpj, nome, tel1, email, rua, numero, complemento, bairro, cep, cidade, uf, status_empresa) values ( '00.209.792/0001-09', 'Morais', '(31) 2138-4700', 'erg@ergbh.com.br', 'R. Rio Grande do Sul', '1066', '1º andar', 'Santo Agostinho', '30170-111', 'Belo Horizonte', 'MG', 'ATIVA');
+insert into empresas (cnpj, nome, tel1, email, rua, numero, complemento, bairro, cep, cidade, uf, status_empresa) values ( '75.626.130/0001-33', 'Empresa Fictícia ', '(67) 2613-3518', 'wobada6085@naobk.com', 'R. Rio Grande do Sul', '1012', '1º andar', 'Santo Agostinho', '32046-150', 'Contagem', 'MG', 'ATIVA');
+insert into empresas (cnpj, nome, tel1, email, rua, numero, complemento, bairro, cep, cidade, uf, status_empresa) values ( '84.392.776/0001-94', 'Empresa Fictícia 2', '(69) 3085-2841', 'odilio8554@uorak.com', 'Estrada do Côco', 'Km 13', '1º andar', 'Centro', '42840-971', 'Abrantes', 'BA', 'ATIVA');
 
 
 insert into centrocusto (numero, descricao, datainicio, datafim, status) values ('510','Tecnologia da Informação','16/04/2024','16/05/2024','FINALIZADO')
 insert into centrocusto (numero, descricao, datainicio, datafim, status) values ('81','Samarco Rotina','16/04/2024','16/05/2024','ATIVO')
 insert into centrocusto (numero, descricao, datainicio, datafim, status) values ('83','Mineração Usiminas S/A','16/04/2024','16/05/2024','ATIVO')
 
-insert into funcionarios (nome, cpf, admissao, matricula, nascimento, genero, estado_civil, grau, tel1, email, cidade, uf, id_empresas, id_centrocusto, id_cargos) values ('Bruna', '099.259.606-81', '02/08/2023', '0052', '03/02/1994', 'FEMININO', 'SOLTEIRO', 'SUPERIOR_COMPLETO' , '(31) 9 9477-7720', 'bruna.blm13@gmail.com', 'Contagem', 'MG', 1, 1, 2);
-insert into funcionarios (nome, cpf, admissao, matricula, nascimento, genero, estado_civil, grau, tel1, email, cidade, uf, id_empresas, id_centrocusto, id_cargos) values ('Carlos', '088.888.888-88', '02/08/2024', '0062', '03/02/1990', 'MASCULINO', 'SOLTEIRO', 'SUPERIOR_COMPLETO' , '(31) 9 9999-9999', 'calos.ti@gmail.com', 'Belo Horizonte', 'MG', 1, 1, 2);
+insert into funcionarios (nome, cpf, admissao, matricula, nascimento, genero, estado_civil, grau, tel1, email, cidade, uf, id_empresas, id_centrocusto, id_cargos) values ('Bruna', '104.023.150-06', '02/08/2023', '0052', '03/01/1989', 'FEMININO', 'SOLTEIRO', 'SUPERIOR_COMPLETO' , '(66) 9 2768-6221', 'brunateste@teste.com', 'Contagem', 'MG', 1, 1, 2);
+insert into funcionarios (nome, cpf, admissao, matricula, nascimento, genero, estado_civil, grau, tel1, email, cidade, uf, id_empresas, id_centrocusto, id_cargos) values ('Carlos', '780.451.460-36', '02/08/2024', '0062', '03/02/1990', 'MASCULINO', 'SOLTEIRO', 'SUPERIOR_COMPLETO' , '(69) 9 2565-4853', 'calos.teste@teste.com', 'Belo Horizonte', 'MG', 1, 1, 2);
 
 
 insert into clientes (cnpj, nome, razaosocial, tel1, email, rua, numero, complemento, bairro, cep, cidade, uf, id_empresas) values ( '33.592.510/0001-54', 'Vale','Vale', '0800 285 7000', 'vale@vale.com', 'Rodovia MG 040', 'KM 49', 'n/a', 'Santos Anjos', 'Brumadinho', '35.460.000', 'MG', 1);
@@ -66,7 +66,7 @@ INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/ordemservi
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/tiposervico/listar', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/atividades/listar', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/empresas/listar', 'LIVRE_ACESSO');
-INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/clientes/listar', 'LIVRE_ACESSO');
+INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/clientes/listar', 'ADMIN');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/funcionarios/listar', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/apontamentos/listar', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/permissoes/listar', 'LIVRE_ACESSO');
@@ -99,7 +99,7 @@ INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('PUT', '/permissoes
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('PUT', '/usuarios/atualizar', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('PUT', '/tiposervico-atividade/atualizar', 'LIVRE_ACESSO');
 
-INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('DELETE', '/cargos/deletar/{id}', 'LIVRE_ACESSO');
+INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('DELETE', '/cargos/deletar/{id}', 'ADMIN');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('DELETE', '/centrocusto/deletar/{id}', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('DELETE', '/ordemservico/deletar/{id}', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('DELETE', '/tiposervico/deletar/{id}', 'LIVRE_ACESSO');
@@ -122,3 +122,5 @@ INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/ordemservi
 
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/centrocusto-tiposervico/tiposervico/{idCentroCusto}', 'LIVRE_ACESSO');
 INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/tiposervico-atividade/atividade/{idTipoServico}', 'LIVRE_ACESSO');
+INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/apontamentos/funcionario/{idFuncionario}', 'LIVRE_ACESSO');
+INSERT INTO permissao (httpmethod, urlpattern, role) VALUES ('GET', '/apontamentos/funcionario/{idFuncionario}/relatorio', 'LIVRE_ACESSO');

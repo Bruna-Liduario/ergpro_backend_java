@@ -1,5 +1,6 @@
 package com.ergproapontamento.ergpro.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ergproapontamento.ergpro.dto.ApontamentoDTO;
 import com.ergproapontamento.ergpro.dto.dados.DadosApontamentoDto;
+import com.ergproapontamento.ergpro.dto.dados.RelatorioApontamentosDto;
 import com.ergproapontamento.ergpro.dto.dados.SalvarApontamentoDto;
 import com.ergproapontamento.ergpro.exception.NotFoundException;
 import com.ergproapontamento.ergpro.exception.ValidacoesException;
@@ -77,6 +79,52 @@ public class ApontamentoService {
 		return listaDadosApontamentos;		
 	}
 	
+	//listar apontamentos por funcionario
+	public List<RelatorioApontamentosDto> listarApontamentosPorFuncionario(Long idFuncionario, LocalDate startDate, LocalDate endDate) {
+	    List<Apontamento> apontamentos = apontamentoRepository.findByFuncionariosIdAndDataBetween(idFuncionario, startDate, endDate);
+	    List<RelatorioApontamentosDto> listaRelatorioApontamentos = new ArrayList<>();
+	    
+	    for (Apontamento apontamento : apontamentos) {
+	        RelatorioApontamentosDto relatorioApontamento = new RelatorioApontamentosDto();
+	        relatorioApontamento.setId(apontamento.getId());
+	        relatorioApontamento.setData(apontamento.getData());
+	        relatorioApontamento.setMinutos(apontamento.getMinutos());
+	        relatorioApontamento.setMinutosExtra(apontamento.getMinutosExtra());
+	        relatorioApontamento.setMinutosSt(formatMinutos(apontamento.getMinutos()));
+	        relatorioApontamento.setMinutosextraSt(formatMinutos(apontamento.getMinutosExtra()));
+
+	        // Preenche os campos do DTO com base nos valores do Apontamento
+	        String nomeFuncionario = (apontamento.getFuncionarios() != null && apontamento.getFuncionarios().getNome() != null) ? 
+	                                 apontamento.getFuncionarios().getNome() : null;
+	        relatorioApontamento.setNomeFuncionario(nomeFuncionario);
+	        
+	        String descricaoAtividade = (apontamento.getAtividade() != null && apontamento.getAtividade().getDescricao() != null) ? 
+	                                    apontamento.getAtividade().getDescricao() : null;
+	        relatorioApontamento.setDescricaoAtividade(descricaoAtividade);
+	        
+	        String descricaoOrdemServico = (apontamento.getOrdemServico() != null && apontamento.getOrdemServico().getDescricao() != null) ? 
+	                                       apontamento.getOrdemServico().getDescricao() : null;
+	        relatorioApontamento.setDescricaoOrdemServico(descricaoOrdemServico);
+	        
+	        String centroCusto = (apontamento.getOrdemServico() != null && apontamento.getOrdemServico().getCentroCusto() != null) ? 
+	                             apontamento.getOrdemServico().getCentroCusto().getDescricao() + " - " +  apontamento.getOrdemServico().getCentroCusto().getNumero() : null;
+	        relatorioApontamento.setCentroCusto(centroCusto);
+	        
+	        // Soma dos minutos e minutos extras
+	        int totalMinutos = (apontamento.getMinutos() != null ? apontamento.getMinutos() : 0) +
+	                           (apontamento.getMinutosExtra() != null ? apontamento.getMinutosExtra() : 0);
+	        relatorioApontamento.setTotalMinutos(totalMinutos);
+	        
+	        // Formata o total de minutos para HH:mm
+	        String totalHorasFormatadas = formatMinutos(totalMinutos);
+	        relatorioApontamento.setTotalhorasSt(totalHorasFormatadas);
+
+	        listaRelatorioApontamentos.add(relatorioApontamento);
+	    }
+	    
+	    return listaRelatorioApontamentos;
+	}
+	
 	
 	// Método para formatar minutos para string HH:mm
 	private String formatMinutos(Integer minutos) {
@@ -126,6 +174,10 @@ public class ApontamentoService {
 		validarApontamentoExistente(id);
 		apontamentoRepository.deleteById(id);
 	}
+	
+	
+
+
 
 	
 	

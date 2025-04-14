@@ -11,6 +11,7 @@ import com.ergproapontamento.ergpro.dto.FuncionarioDTO;
 import com.ergproapontamento.ergpro.dto.dados.DadosDoFuncionarioDto;
 import com.ergproapontamento.ergpro.exception.NotFoundException;
 import com.ergproapontamento.ergpro.exception.ValidacoesException;
+import com.ergproapontamento.ergpro.repository.ApontamentoRepository;
 import com.ergproapontamento.ergpro.repository.CargoFuncionarioRepository;
 import com.ergproapontamento.ergpro.repository.CentroCustoRepository;
 import com.ergproapontamento.ergpro.repository.EmpresaRepository;
@@ -35,6 +36,9 @@ public class FuncionarioService {
 	
 	@Autowired
 	private CargoFuncionarioRepository cargoRepository;
+	
+	@Autowired
+	private ApontamentoRepository apontamentoRepository;
 	
 	//listar
 //	public List<Funcionario> listarFuncionarios(){
@@ -108,7 +112,8 @@ public class FuncionarioService {
 	}	
 	
 	//excluir
-	public void excluirFuncionario(Long id) throws NotFoundException {
+	public void excluirFuncionario(Long id) throws NotFoundException, ValidacoesException {
+		validarPossibilidadeExclusaoFuncionario(id);
 	    validarFuncionarioExistente(id);
 		funcionarioRepository.deleteById(id);		
 	}	
@@ -159,6 +164,13 @@ public class FuncionarioService {
 		}		
     }
     
+	public boolean validarPossibilidadeExclusaoFuncionario(Long id) throws ValidacoesException {
+		if(apontamentoRepository.existsByFuncionariosId(id)) {
+			throw new ValidacoesException("Não é possível excluir Funcionário pois existem apontamentos associados a ele");
+		} 
+		return true;
+	}
+    
 	
     
     
@@ -200,6 +212,7 @@ public class FuncionarioService {
         
         return funcionario;
     }
+
     
 }
 	
